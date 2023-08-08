@@ -193,7 +193,7 @@ class MessageHandler:
     @patchable
     async def check(self, client, message):
         listener = client.match_listener(
-            (message.chat.id, message.from_user.id, message.id),
+            (message.chat.id, message.from_user.id if message.from_user else message.sender_chat.id, message.id),
             ListenerTypes.MESSAGE,
         )[0]
 
@@ -218,7 +218,7 @@ class MessageHandler:
     async def resolve_future(self, client, message, *args):
         listener_type = ListenerTypes.MESSAGE
         listener, identifier = client.match_listener(
-            (message.chat.id, message.from_user.id, message.id),
+            (message.chat.id, message.from_user.id if message.from_user else message.sender_chat.id, message.id),
             listener_type,
         )
         listener_does_match = False
